@@ -15,8 +15,8 @@ import org.junit.runner.RunWith;
         },
         features = "src/test/resources",
         glue = {"stepDefinitions"},
-        tags = "@query4",
-        dryRun = true
+        tags = "@Q_02",
+        dryRun = false
 )
 public class Runner {
 

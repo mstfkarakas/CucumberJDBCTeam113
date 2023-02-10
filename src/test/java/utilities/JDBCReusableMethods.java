@@ -8,18 +8,14 @@ import java.util.Map;
 
 public class JDBCReusableMethods {
 
-    static String databaseUrl = "idbc:mysql://194.140.198.209/heallife hospitaltraining";
-    static String username = "heallife_hospitaltraininguser";
-    static String password = "PI2ZJx@9m^)3";
-
     static Statement statement;
     static Connection connection;
     static ResultSet resultSet;
 
     public static void createConnection()  {
-        String url=ConfigReader.get("db_credentials_url");
-        String username=ConfigReader.get("db_username");
-        String password=ConfigReader.get("db_password");
+        String url = ConfigReader.get("db_url");
+        String username = ConfigReader.get("db_username");
+        String password = ConfigReader.get("db_password");
 
         try {
             connection = DriverManager.getConnection(url, username, password);
@@ -57,7 +53,7 @@ public class JDBCReusableMethods {
             e.printStackTrace();
         }
         try {
-            ResultSet resultSet = statement.executeQuery(query);
+            resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -7,6 +7,11 @@ public class Manage {
 
     private String languagesQuery= "Select language From heallife_hospitaltraining.languages Where short_code = 'yi'";
 
+    private String appointmentLiveConsult = "select live_consult from heallife_hospitaltraining.appointment where patient_id = 20";
+
+    private String paymentTypeOffline = "SELECT id FROM heallife_hospitaltraining.appointment_payment WHERE payment_type='Offline'";
+
+
     public String getQuerySabah() {
         return querySabah;
     }
@@ -19,4 +24,11 @@ public class Manage {
         return languagesQuery;
     }
 
+    public String getAppointmentLiveConsult() {
+        return appointmentLiveConsult;
+    }
+
+    public String getPaymentTypeOffline() {
+        return paymentTypeOffline;
+    }
 }
