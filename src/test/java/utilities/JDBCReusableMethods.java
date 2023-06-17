@@ -16,66 +16,70 @@ public class JDBCReusableMethods {
     static Connection connection;
     static ResultSet resultSet;
 
-    public void createConnection() {
+    public static void createConnection()  {
+        String url=ConfigReader.get("db_credentials_url");
+        String username=ConfigReader.get("db_username");
+        String password=ConfigReader.get("db_password");
+
         try {
-            connection = DriverManager.getConnection(databaseUrl, username, password);
+            connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
-            System.out.println("The Connection to Database failed :" + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
+
     public static void updateQuery(String query) throws SQLException {
 
-        int st = statement.executeUpdate(query);
+        int st =  statement.executeUpdate(query);
+
         System.out.println(st);
     }
 
-    public static synchronized void update(String query) throws SQLException {
 
+    public static synchronized void update(String query) throws SQLException {
         Statement st = connection.createStatement();
         int ok = st.executeUpdate(query);
-
         if (ok == -1) {
             throw new SQLException("DB problem with query: " + query);
         }
         st.close();
     }
 
+    /**
+     * DBUtils.executeQuery(String query); -> Execute the query and store is the result set object
+     *
+     * @return
+     */
 
     public static ResultSet executeQuery(String query) {
         try {
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         } catch (SQLException e) {
-            System.out.println("The Statement failed :" + e.getMessage());
+            // TODO Auto-generated catch block
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
         try {
+            ResultSet resultSet = statement.executeQuery(query);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+       /* try {
             resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
-            System.out.println("The Query failed :" + e.getMessage());
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-     /*
-     TYPE_SCROLL_INSENSITIVE
-     when using this type, the result set is scrollable, it means we can navigate forward abd backward through the rows
-      */
-        return null;
+        */
+
+        return resultSet;
     }
 
-    public List<Object> getColumnData(String query, String columnName) {
-        executeQuery(query);
-        List<Object> rowList = new ArrayList<>();
-        ResultSetMetaData rsmd;
-        try {
-            rsmd = resultSet.getMetaData();
-            while (resultSet.next()) {
-                rowList.add(resultSet.getObject(columnName));
-            }
-        } catch (SQLException e) {
-            System.out.println("Execution of the Query failed :" + e.getMessage());
-        }
-        return rowList;
-    }
 
-    public void closeConnection() {
+
+    //    used to close the connectivity
+    public static void closeConnection() {
         try {
             if (resultSet != null) {
                 resultSet.close();
@@ -87,72 +91,97 @@ public class JDBCReusableMethods {
                 connection.close();
             }
         } catch (SQLException e) {
-            System.out.println("The close method failed :" + e.getMessage());
+            e.printStackTrace();
         }
     }
+
 
     public static Connection getConnection() {
         String url = "";
-        String username = "";
-        String password = "";
-
+        String username="";
+        String password="";
         try {
             connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         return connection;
     }
 
-    public static Statement getStatement() {
 
+
+    //used to get statement
+    public static Statement getStatement() {
         try {
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         } catch (SQLException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return statement;
     }
 
 
-    public static ResultSet getResultSet() {
 
+    //Use this to get the ResutSet object
+    public static ResultSet getResultset() {
         try {
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
         } catch (SQLException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         return resultSet;
     }
 
-    public static int getRowCount() throws SQLException {
 
+
+
+    // This method returns the number fo row in a table in the database
+    public static int getRowCount() throws Exception {
         resultSet.last();
         int rowCount = resultSet.getRow();
-
         return rowCount;
     }
+    /**
+     * @return returns a single cell value. If the results in multiple rows and/or
+     *         columns of data, only first column of the first row will be returned.
+     *         The rest of the data will be ignored
+     */
+    public static Object getCellValue(String query) {
 
-    public static Object getCellValue (String query) {
         return getQueryResultList(query).get(0).get(0);
     }
-
+    /**
+     * @return returns a list of Strings which represent a row of data. If the query
+     *         results in multiple rows and/or columns of data, only first row will
+     *         be returned. The rest of the data will be ignored
+     */
     public static List<Object> getRowList(String query) {
+
         return getQueryResultList(query).get(0);
     }
-
+    /**
+     * @return returns a map which represent a row of data where key is the column
+     *         name. If the query results in multiple rows and/or columns of data,
+     *         only first row will be returned. The rest of the data will be ignored
+     */
     public static Map<String, Object> getRowMap(String query) {
         return getQueryResultMap(query).get(0);
-
     }
+    /**
+     * @return returns query result in a list of lists where outer list represents
+     *         collection of rows and inner lists represent a single row
+     */
+
+
+
 
     public static List<List<Object>> getQueryResultList(String query) {
         executeQuery(query);
         List<List<Object>> rowList = new ArrayList<>();
         ResultSetMetaData rsmd;
-
         try {
             rsmd = resultSet.getMetaData();
             while (resultSet.next()) {
@@ -162,18 +191,47 @@ public class JDBCReusableMethods {
                 }
                 rowList.add(row);
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return rowList;
     }
+    /**
+     * @return list of values of a single column from the result set
+     */
+
+
+
+
+    public static List<Object> getColumnData(String query, String column) {
+        executeQuery(query);
+        List<Object> rowList = new ArrayList<>();
+        ResultSetMetaData rsmd;
+        try {
+            rsmd = resultSet.getMetaData();
+            while (resultSet.next()) {
+                rowList.add(resultSet.getObject(column));
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return rowList;
+    }
+    /**
+     * @return returns query result in a list of maps where the list represents
+     *         collection of rows and a map represents represent a single row with
+     *         key being the column name
+     */
+
+
 
     public static List<Map<String, Object>> getQueryResultMap(String query) {
         executeQuery(query);
         List<Map<String, Object>> rowList = new ArrayList<>();
         ResultSetMetaData rsmd;
-
-        try{
+        try {
             rsmd = resultSet.getMetaData();
             while (resultSet.next()) {
                 Map<String, Object> colNameValueMap = new HashMap<>();
@@ -182,47 +240,47 @@ public class JDBCReusableMethods {
                 }
                 rowList.add(colNameValueMap);
             }
-
-        }catch (SQLException e) {
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
-
         }
         return rowList;
     }
 
-    public static List<String> getColumnNames (String query) {
+
+    /*
+     * @return List of columns returned in result set
+     */
+    public static List<String> getColumnNames(String query) {
         executeQuery(query);
         List<String> columns = new ArrayList<>();
         ResultSetMetaData rsmd;
-
         try {
             rsmd = resultSet.getMetaData();
             int columnCount = rsmd.getColumnCount();
             for (int i = 1; i <= columnCount; i++) {
                 columns.add(rsmd.getColumnName(i));
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return columns;
     }
 
-    public static void printResultSet (ResultSet resultSet) {
-
+    public static void printResultSet(ResultSet resultSet) {
         try {
             ResultSetMetaData metaData = resultSet.getMetaData();
             int columnCount = metaData.getColumnCount();
+
             while (resultSet.next()) {
                 for (int i = 1; i <= columnCount; i++) {
-                    System.out.println(metaData.getColumnName(i) + ": " + resultSet.getString(i) + " ");
+                    System.out.print(metaData.getColumnName(i) + ": " + resultSet.getString(i) + " ");
                 }
                 System.out.println();
             }
-        }catch (SQLException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("ResultSet yazdırılırken bir hata oluştu: " + e.getMessage());
         }
-
     }
 
 
