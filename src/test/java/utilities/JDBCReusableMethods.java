@@ -8,9 +8,9 @@ import java.util.Map;
 
 public class JDBCReusableMethods {
 
-    static String databaseUrl = "jdbc:mysql://localhost:3306/team112?serverTimezone=UTC";
-    static String username = "root";
-    static String password = "1604";
+    static String databaseUrl = "idbc:mysql://194.140.198.209/heallife hospitaltraining";
+    static String username = "heallife_hospitaltraininguser";
+    static String password = "PI2ZJx@9m^)3";
 
     static Statement statement;
     static Connection connection;

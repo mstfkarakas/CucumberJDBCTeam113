@@ -14,6 +14,7 @@ import static utilities.JDBCReusableMethods.getStatement;
 
 
 public class Stepdefinition {
+
     String query;
     String query1;
     ResultSet rs;
@@ -61,7 +62,7 @@ public class Stepdefinition {
 
     @Given("Update Query'si hazirlanir.")
     public void update_query_si_hazirlanir() {
-        query1="insert into heallife_hospitaltraining.appointment (priority,specialist,doctor,amount,message,appointment_status,source,is_opd,is_ipd,live_consult) values (1,2,2,0,'helloTeam113','approved','OFFline','no','yes','yes');";
+        query1="INSERT INTO heallife_hospitaltraining.appointment (priority,specialist,doctor,amount,message,appointment_status,source,is_opd,is_ipd,live_consult) VALUES (1,2,2,0,'helloTeam113','approved','OFFline','no','yes','yes');";
 
     }
     @Given("Sonuclari alinir ve dogrulanir.")
