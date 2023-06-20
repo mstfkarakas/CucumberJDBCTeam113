@@ -28,14 +28,10 @@ public class JDBCReusableMethods {
         }
     }
 
-
     public static void updateQuery(String query) throws SQLException {
-
         int st =  statement.executeUpdate(query);
-
         System.out.println(st);
     }
-
 
     public static synchronized void update(String query) throws SQLException {
         Statement st = connection.createStatement();
@@ -46,8 +42,8 @@ public class JDBCReusableMethods {
         st.close();
     }
 
-    /**
-     * DBUtils.executeQuery(String query); -> Execute the query and store is the result set object
+    /*
+     * DBUtils.executeQuery(String query); -> Execute the query and store is the ResultSet object
      *
      * @return
      */
@@ -111,7 +107,7 @@ public class JDBCReusableMethods {
 
 
 
-    //used to get statement
+    //used to get STATEMENT
     public static Statement getStatement() {
         try {
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
@@ -124,7 +120,7 @@ public class JDBCReusableMethods {
 
 
 
-    //Use this to get the ResutSet object
+    //use this to get the ResultSet object
     public static ResultSet getResultset() {
         try {
             statement = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);

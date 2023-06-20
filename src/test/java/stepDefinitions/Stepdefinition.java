@@ -23,6 +23,9 @@ public class Stepdefinition {
 
     int flag;
 
+    String querySabah = "SELECT COUNT(*) FROM heallife_hospitaltraining.appointment WHERE hour(time) < 12;";
+    String queryAksam = "SELECT COUNT(*) FROM heallife_hospitaltraining.appointment WHERE hour(time) > 12;";
+
     Manage manage = new Manage();
     @Given("Database baglantisi kurulur.")
     public void database_baglantisi_kurulur() {
@@ -77,10 +80,11 @@ public class Stepdefinition {
         assertEquals(verify,1);
     }
 
-    //-------------------------------------------------------------------------------
+    //-------------------------------JDBC Query 3------------------------------------------------
 
     @Given("Randevu sayilarini ogrenebilecegimiz sql querysi hazirlanir.")
     public void randevu_sayilarini_ogrenebilecegimiz_sql_querysi_hazirlanir() {
+
 
 
     }
@@ -99,14 +103,13 @@ public class Stepdefinition {
 
         assertTrue(sabahRandevulari < aksamRandevulari);
 
-
     }
-//-------------------------------------------------------------------------------------
+//------------------------------JDBC Query 4-------------------------------------------------------
 
     @Given("Languages tablosuna query gönderilir ve sonuclar dogrulanir.")
     public void languages_tablosuna_query_gönderilir_ve_sonuclar_dogrulanir() throws SQLException {
 
-        rs= getStatement().executeQuery(manage.getLanguagesQuery());
+        rs = getStatement().executeQuery(manage.getLanguagesQuery());
         rs.next();
         String expectedLanguages= "Yiddish";
         String actualLanguages= rs.getString(1);
@@ -114,6 +117,4 @@ public class Stepdefinition {
         assertEquals(expectedLanguages,actualLanguages);
 
     }
-
-
 }
