@@ -174,4 +174,20 @@ public class Stepdefinition {
         assertEquals(expected, resultSet.getString(1));
 
     }
+    // ____________________ SORU 05 _____________________________________________
+    @Then("Patient bed group_id {int} ve aktiflik bilgisi no gonderilip hasta ismi dogrulanir.")
+    public void patient_bed_group_id_ve_aktiflik_bilgisi_no_gonderilip_hasta_ismi_dogrulanir(int int1) {
+
+
+    }
+    @Then("Gerekli bilgi {int} olarak dogrulanir.")
+    public void gerekli_bilgi_olarak_dogrulanir(String is_active) {
+
+
+
+    }
+
+
+
+
 }
