@@ -1,6 +1,7 @@
 package stepDefinitions;
 
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
 import utilities.JDBCReusableMethods;
 import utilities.Manage;
 
@@ -124,31 +125,53 @@ public class Stepdefinition {
         assertEquals(expectedLanguages, actualLanguages);
 
     }
-
-    // _________________________________________________________________
-
+    // ____________________ SORU 01 _____________________________________________
     @Given("Sorgulama icin query olusturulur ve sonuc dogrulanir.")
     public void sorgulama_icin_query_olusturulur_ve_sonuc_dogrulanir() throws SQLException {
 
         statement = JDBCReusableMethods.getStatement();
         resultSet = JDBCReusableMethods.executeQuery(manage.getAppointmentLiveConsult());
-
         resultSet.next();
-
         assertEquals("yes", resultSet.getString(1));
-
     }
+    // ____________________ SORU 02 _____________________________________________
 
     @Given("Appointment payment Query olusturulur ve {int} dogrulanir.")
     public void appointment_payment_query_olusturulur_ve_dogrulanir(int id) throws SQLException {
         statement = JDBCReusableMethods.getStatement();
         resultSet = statement.executeQuery(manage.getPaymentTypeOffline());
+
         List<Integer> idList = new ArrayList<>();
+
         while (resultSet.next()) {
             idList.add(resultSet.getInt(1));
         }
         assertTrue(idList.contains(id));
     }
 
+    // ____________________ SORU 03 _____________________________________________
 
+    @Given("Query calistirilir ve sonuclari siralanir.")
+    public void query_calistirilir_ve_sonuclari_siralanir() throws SQLException {
+
+        statement = JDBCReusableMethods.getStatement();
+        resultSet = JDBCReusableMethods.executeQuery(manage.getAppointmentQueue());
+
+        if (resultSet.next()) {
+            String columnValue = resultSet.getString(6);
+            System.out.println(columnValue);
+        }
+    }
+
+    // ____________________ SORU 04 _____________________________________________
+    @Then("Bed tablosunda verilen hastanin active olup olmadigi dogrulanir.")
+    public void bed_tablosunda_verilen_hastanin_active_olup_olmadigi_dogrulanir() throws SQLException {
+
+        resultSet = getStatement().executeQuery(manage.getIsBedActive());
+        resultSet.next();
+
+        String expected = "yes";
+        assertEquals(expected, resultSet.getString(1));
+
+    }
 }
