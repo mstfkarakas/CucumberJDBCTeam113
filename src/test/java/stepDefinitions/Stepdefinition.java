@@ -180,7 +180,7 @@ public class Stepdefinition {
         resultSet = getStatement().executeQuery(manage.getPatientName());
         List<Integer> resultList = new ArrayList<>();
 
-
+    // incomplete
 
     }
     @Then("Gerekli bilgi {int} olarak dogrulanir.")
