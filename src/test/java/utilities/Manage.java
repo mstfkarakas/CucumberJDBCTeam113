@@ -15,7 +15,7 @@ public class Manage {
 
     private String isBedActive = "SELECT is_active FROM heallife_hospitaltraining.bed WHERE created_at = '2021-10-25 03:34:25'";
 
-    private String patient_105 = "SELECT name FROM heallife_hospitaltraining.bed WHERE bed_group_id = 4 AND is_active = 'no';";
+    private String patientName = "SELECT name FROM heallife_hospitaltraining.bed WHERE bed_group_id = 4 AND is_active = 'no';";
 
 
 
@@ -47,8 +47,7 @@ public class Manage {
         return isBedActive;
     }
 
-
-
-
-
+    public String getPatientName() {
+        return patientName;
+    }
 }

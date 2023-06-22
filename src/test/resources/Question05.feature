@@ -1,5 +1,5 @@
 Feature: Question 05
-
+  @Q_05
   Scenario Outline: Database üzerinden bed tablosunda bed group id'si 4 ve is_active= "no" olan hastanin
   name bilgisinin 105 oldugunu dogrulayiniz.
 

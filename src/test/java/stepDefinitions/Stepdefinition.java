@@ -176,7 +176,10 @@ public class Stepdefinition {
     }
     // ____________________ SORU 05 _____________________________________________
     @Then("Patient bed group_id {int} ve aktiflik bilgisi no gonderilip hasta ismi dogrulanir.")
-    public void patient_bed_group_id_ve_aktiflik_bilgisi_no_gonderilip_hasta_ismi_dogrulanir(int int1) {
+    public void patient_bed_group_id_ve_aktiflik_bilgisi_no_gonderilip_hasta_ismi_dogrulanir(int int1) throws SQLException {
+        resultSet = getStatement().executeQuery(manage.getPatientName());
+        List<Integer> resultList = new ArrayList<>();
+
 
 
     }
