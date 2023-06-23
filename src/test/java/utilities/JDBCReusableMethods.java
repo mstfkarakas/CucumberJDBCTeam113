@@ -194,8 +194,6 @@ public class JDBCReusableMethods {
      */
 
 
-
-
     public static List<Object> getColumnData(String query, String column) {
         executeQuery(query);
         List<Object> rowList = new ArrayList<>();
@@ -216,8 +214,6 @@ public class JDBCReusableMethods {
      *         collection of rows and a map represents represent a single row with
      *         key being the column name
      */
-
-
 
     public static List<Map<String, Object>> getQueryResultMap(String query) {
         executeQuery(query);
@@ -274,12 +270,5 @@ public class JDBCReusableMethods {
             System.out.println("ResultSet yazdırılırken bir hata oluştu: " + e.getMessage());
         }
     }
-
-
-
-
-
-
-
 
 }
